@@ -6,7 +6,7 @@
 
 	<groupId>fceb0247-0ce9-4990-b4f6-31b273dd11a5</groupId>
 	<artifactId>cicd-setup</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<packaging>mule-application</packaging>
 
 	<name>cicd-setup</name>
@@ -41,7 +41,7 @@
 						<target>Cloudhub-US-East-2</target>
 						<server>Repository</server>
 						<applicationName>${project.artifactId}</applicationName>
-						<releaseChannel>4.6.5</releaseChannel>
+						<releaseChannel>LTS</releaseChannel>
 						<replicas>1</replicas>
 						<vCores>0.1</vCores>
 						<deploymentSettings>
