@@ -6,7 +6,7 @@
 
 	<groupId>fceb0247-0ce9-4990-b4f6-31b273dd11a5</groupId>
 	<artifactId>cicd-setup</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.2</version>
 	<packaging>mule-application</packaging>
 
 	<name>cicd-setup</name>
