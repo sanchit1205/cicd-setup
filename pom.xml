@@ -6,7 +6,7 @@
 
 	<groupId>fceb0247-0ce9-4990-b4f6-31b273dd11a5</groupId>
 	<artifactId>cicd-setup</artifactId>
-	<version>1.0.6</version>
+	<version>1.0.7</version>
 	<packaging>mule-application</packaging>
 
 	<name>cicd-setup</name>
@@ -53,6 +53,9 @@
 						<deploymentSettings>
 							<generateDefaultPublicUrl>true</generateDefaultPublicUrl>
 						</deploymentSettings>
+						<properties>
+							<anypoint.platform.base_uri>https://anypoint.mulesoft.com</anypoint.platform.base_uri>
+						</properties>
 					</cloudhub2Deployment>
 				</configuration>
 			</plugin>
