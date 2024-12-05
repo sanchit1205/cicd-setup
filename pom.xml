@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>fceb0247-0ce9-4990-b4f6-31b273dd11a5</groupId>
@@ -17,6 +15,7 @@
 
 		<app.runtime>4.6.5</app.runtime>
 		<mule.maven.plugin.version>4.2.0</mule.maven.plugin.version>
+		<munit.version>3.2.1</munit.version>
 	</properties>
 
 	<build>
@@ -38,7 +37,7 @@
 						<uri>https://anypoint.mulesoft.com</uri>
 						<provider>MC</provider>
 						<businessGroupId>${project.groupId}</businessGroupId>
-						<environment>Sandbox</environment>
+						<environment>${mule.env}</environment>
 						<muleVersion>4.6.5</muleVersion>
 						<javaVersion>17</javaVersion>
 						<connectedAppClientId>${client.id}</connectedAppClientId>
@@ -46,17 +45,62 @@
 						<connectedAppGrantType>client_credentials</connectedAppGrantType>
 						<target>Cloudhub-US-East-2</target>
 						<server>Repository</server>
-						<applicationName>${project.artifactId}</applicationName>
+						<applicationName>${project.artifactId}-${app.envlabel}-${app.majorVersion}</applicationName>
 						<releaseChannel>LTS</releaseChannel>
 						<replicas>1</replicas>
 						<vCores>0.1</vCores>
 						<deploymentSettings>
-							<generateDefaultPublicUrl>true</generateDefaultPublicUrl>
+							<generateDefaultPublicUrl>false</generateDefaultPublicUrl>
+							<enforceDeployingReplicasAcrossNodes>${dep.enforceDeployingReplicasAcrossNodes}</enforceDeployingReplicasAcrossNodes>
+							<!-- boolean -->
+							<clustered>${dep.clustered}</clustered>
+							<!-- boolean -->
+							<updateStrategy>${dep.updateStrategy}</updateStrategy>
+							<!-- Values : rolling , recreate -->
+							<http>
+								<inbound>
+									<forwardSslSession>false</forwardSslSession>
+									<lastMileSecurity>false</lastMileSecurity>
+								</inbound>
+							</http>
 						</deploymentSettings>
 						<properties>
+							<mule.env>${mule.env}</mule.env>
+							<!-- Example : DEV, SIT, UAT, PROD -->
 							<anypoint.platform.base_uri>https://anypoint.mulesoft.com</anypoint.platform.base_uri>
+							<anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com</anypoint.platform.analytics_base_uri>
+							<anypoint.platform.client_id>${platform.client_id}</anypoint.platform.client_id>
+							<anypoint.platform.visualizer.layer>Experience</anypoint.platform.visualizer.layer>
+							<anypoint.platform.visualizer.displayName>${project.artifactId}</anypoint.platform.visualizer.displayName>
 						</properties>
+						<secureProperties>
+							<anypoint.platform.client_secret>${platform.client_secret}</anypoint.platform.client_secret>
+							<secure.key>${secure.key}</secure.key>
+						</secureProperties>
 					</cloudhub2Deployment>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mulesoft.munit.tools</groupId>
+				<artifactId>munit-maven-plugin</artifactId>
+				<version>${munit.version}</version>
+				<executions>
+					<execution>
+						<id>test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+							<goal>coverage-report</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<coverage>
+						<runCoverage>true</runCoverage>
+						<formats>
+							<format>html</format>
+						</formats>
+					</coverage>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -74,6 +118,26 @@
 			<artifactId>mule-sockets-connector</artifactId>
 			<version>1.2.4</version>
 			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.munit</groupId>
+			<artifactId>munit-runner</artifactId>
+			<version>3.2.1</version>
+			<classifier>mule-plugin</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.munit</groupId>
+			<artifactId>munit-tools</artifactId>
+			<version>3.2.1</version>
+			<classifier>mule-plugin</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.weave</groupId>
+			<artifactId>assertions</artifactId>
+			<version>1.2.1</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -97,7 +161,6 @@
 			<layout>default</layout>
 		</repository>
 	</repositories>
-
 
 	<pluginRepositories>
 		<pluginRepository>

@@ -28,11 +28,15 @@ jobs:
       
       - name: Publish to Exchange
         run: |
-          mvn deploy --settings .maven/settings.xml -DskipMunitTests \
+          mvn deploy --settings .maven/settings.xml \
           -Dclient.id="${{ secrets.CONNECTED_APP_CLIENT_ID }}" \
           -Dclient.secret="${{ secrets.CONNECTED_APP_CLIENT_SECRET }}"
       - name: Deploy to CloudHub 2.0
         run: |
           mvn deploy --settings .maven/settings.xml -DskipMunitTests -DmuleDeploy \
           -Dclient.id="${{ secrets.CONNECTED_APP_CLIENT_ID }}" \
-          -Dclient.secret="${{ secrets.CONNECTED_APP_CLIENT_SECRET }}" 
+          -Dclient.secret="${{ secrets.CONNECTED_APP_CLIENT_SECRET }}" \
+          -Ddep.enforceDeployingReplicasAcrossNodes=true -Ddep.clustered=false \
+          -Ddep.updateStrategy=rolling -Dplatform.client_id="${{ secrets.PLATFORM_CLIENT_ID }}" \
+          -Dplatform.client_secret="${{ secrets.PLATFORM_CLIENT_SECRET }}" -Dsecure.key="${{ secrets.SECURE_KEY }}" \
+          -Dmule.env="${{ vars.APPLICATION_ENV }}" -Dapp.envlabel="${{ vars.APP_ENV_LABEL }}" -Dapp.majorVersion=v1
